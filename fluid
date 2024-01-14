@@ -73,6 +73,15 @@ zip -9 -r ../$NAME.zip .
 cd ..
 NOTE "Done!"
 
+# Symlinking mods folder
+if [[ ! -L ./$BUILD_DIR/mods ]]; then
+	cd ./$BUILD_DIR
+	NOTE "Making symlink to mods dir..."
+	ln -sf ../mods ./mods
+	cd ..
+	NOTE "Done"
+fi
+
 printf "Build successful!\n"
 
 # vim:set noet sw=4 ts=4 ft=zsh:
