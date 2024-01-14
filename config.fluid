@@ -1,0 +1,4 @@
+NAME="ELib-test"
+BUILD_DIR="build"
+FILES="*.lua"
+# vim:set ft=zsh:
