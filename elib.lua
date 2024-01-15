@@ -4,7 +4,7 @@
 local ELib = {
 	_LICENSE = "MIT",
 	_VERSION = "0.0.1",
-	-- _URL = "https://github.com/EndeyshentLabs/entanglement-lib",
+	_URL = "https://github.com/EndeyshentLabs/entanglement-lib",
 	_AUTHOR = "EndeyshentLabs",
 	_DESCRIPTION = "Collection of APIs and utilities for LOVE2D games",
 
