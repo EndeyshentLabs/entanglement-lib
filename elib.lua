@@ -12,7 +12,9 @@ local ELib = {
 
 	-- Modules
 	save = {},
-	mod = {},
+	mod = {
+		_INITIALIZED = false,
+	},
 	serial = {},
 	net = {},
 	log = {},
@@ -31,6 +33,10 @@ end
 ---Initialises mod API with `modpath`
 ---@param modpath any
 function ELib.mod:init(modpath)
+	if self._INITIALIZED then
+		ELib.log:warn("Reinitializing modules is not recommended!", "Entanglement")
+	end
+
 	self.modpath = modpath or "mods"
 
 	if love.filesystem.isFused() then
@@ -44,11 +50,17 @@ function ELib.mod:init(modpath)
 	else
 		ELib.log:warn("External mods aren't supported in not fused executables", "Entanglement")
 	end
+
+	self._INITIALIZED = true
 end
 
 ---Loads mods in `modpath`
 ---@return table mods
 function ELib.mod:loadMods()
+	if not self._INITIALIZED then
+		error("Entanglement module `mod` wasn't initialized!")
+	end
+
 	self.moddirs = love.filesystem.getDirectoryItems(self.modpath)
 	local mods = {}
 
