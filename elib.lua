@@ -107,7 +107,7 @@ end
 ---@return boolean
 ---@return boolean
 function ELib.mod:validateMod(mod)
-    local infoValid = mod._NAME and mod._VERSION
+    local infoValid = mod._NAME ~= nil and mod._VERSION ~= nil
 	local functionsValid = type(mod.load) == "function"
 
 	return infoValid, functionsValid
