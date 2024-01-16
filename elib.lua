@@ -22,6 +22,7 @@ local ELib = {
 
 ELib.__index = ELib
 
+---Initializes the Entanglement Library
 function ELib:init()
 	if package.config:sub(1, 1) == "\\" then
 		self.ostype = "windows"
@@ -55,7 +56,7 @@ function ELib.mod:init(modpath)
 end
 
 ---Loads mods in `modpath`
----@return table mods
+---@return table<ELib.Mod> mods
 function ELib.mod:loadMods()
 	if not self._INITIALIZED then
 		error("Entanglement module `mod` wasn't initialized!")
@@ -101,6 +102,10 @@ function ELib.mod:loadMods()
 	return mods
 end
 
+---Validating `mod`'s header and `load` function
+---@param mod ELib.Mod
+---@return boolean
+---@return boolean
 function ELib.mod:validateMod(mod)
     local infoValid = mod._NAME and mod._VERSION
 	local functionsValid = type(mod.load) == "function"
@@ -169,3 +174,12 @@ function ELib.log:debug(msg, author)
 end
 
 return setmetatable({}, ELib)
+
+---@class ELib.Mod
+---@field _NAME string Mod display name
+---@field _VERSION string Mod's version
+---@field _AUTHOR string? Mod's author
+---@field _DESCRIPTION string? Mod's description
+---@field load function? love.load function for mod
+---@field update function? love.load function for mod
+---@field draw function? love.load function for mod

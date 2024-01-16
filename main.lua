@@ -1,5 +1,6 @@
 ELib = require("elib")
 
+---@type table<ELib.Mod>
 local loadedMods = {}
 local brokenModCount = 0
 
