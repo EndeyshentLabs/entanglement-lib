@@ -15,6 +15,7 @@ local ELib = {
 	mod = {},
 	serial = {},
 	net = {},
+	log = {},
 }
 
 ELib.__index = ELib
@@ -41,7 +42,7 @@ function ELib.mod:init(modpath)
 			error(("Unable to mount modpath (%s) directory!"):format(self.modpath))
 		end
 	else
-		print("[Entanglement/WARN] External mods aren't supported on not fused executables")
+		ELib.log:warn("External mods aren't supported in not fused executables", "Entanglement")
 	end
 end
 
@@ -93,6 +94,66 @@ function ELib.mod:validateMod(mod)
 	local functionsValid = type(mod.load) == "function"
 
 	return infoValid, functionsValid
+end
+
+---@enum ELib.LogLevel
+ELib.log.LogLevel = {
+	INFO = "INFO",
+	WARN = "WARN",
+	ERROR = "ERROR",
+	FATAL = "FATAL",
+	DEBUG = "DEBUG",
+}
+
+---Log `msg` to stdout or stderr with `level`
+---@param level ELib.LogLevel
+---@param msg string
+---@param author string?
+function ELib.log:log(level, msg, author)
+	local buf = io.stdout
+	if level == self.LogLevel.FATAL or level == self.LogLevel.FATAL then
+		buf = io.stderr
+	end
+	if not author then
+		buf:write(("[%s] %s\n"):format(level, msg))
+	else
+		buf:write(("[%s/%s] %s\n"):format(author, level, msg))
+	end
+end
+
+---Wrapper function for `log:log()` for `LogLevel::INFO`
+---@param msg string
+---@param author string?
+function ELib.log:info(msg, author)
+	self:log(self.LogLevel.info, msg, author)
+end
+
+---Wrapper function for `log:log()` for `LogLevel::WARN`
+---@param msg string
+---@param author string?
+function ELib.log:warn(msg, author)
+	self:log(self.LogLevel.WARN, msg, author)
+end
+
+---Wrapper function for `log:log()` for `LogLevel::ERROR`
+---@param msg string
+---@param author string?
+function ELib.log:error(msg, author)
+	self:log(self.LogLevel.ERROR, msg, author)
+end
+
+---Wrapper function for `log:log()` for `LogLevel::FATAL`
+---@param msg string
+---@param author string?
+function ELib.log:fatal(msg, author)
+	self:log(self.LogLevel.FATAL, msg, author)
+end
+
+---Wrapper function for `log:log()` for `LogLevel::DEBUG`
+---@param msg string
+---@param author string?
+function ELib.log:debug(msg, author)
+	self:log(self.LogLevel.DEBUG, msg, author)
 end
 
 return setmetatable({}, ELib)
