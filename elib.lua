@@ -128,7 +128,7 @@ ELib.log.LogLevel = {
 ---@param author string?
 function ELib.log:log(level, msg, author)
 	local buf = io.stdout
-	if level == self.LogLevel.FATAL or level == self.LogLevel.FATAL then
+	if level == self.LogLevel.FATAL or level == self.LogLevel.ERROR then
 		buf = io.stderr
 	end
 	if not author then
