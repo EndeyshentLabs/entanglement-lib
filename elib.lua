@@ -107,7 +107,7 @@ end
 ---@return boolean
 ---@return boolean
 function ELib.mod:validateMod(mod)
-    local infoValid = mod._NAME ~= nil and mod._VERSION ~= nil
+	local infoValid = mod._NAME ~= nil and mod._VERSION ~= nil
 	local functionsValid = type(mod.load) == "function"
 
 	return infoValid, functionsValid
@@ -123,19 +123,34 @@ ELib.log.LogLevel = {
 }
 
 ---Log `msg` to stdout or stderr with `level`
+---(PRIVATE)
 ---@param level ELib.LogLevel
 ---@param msg string
 ---@param author string?
+---@private
 function ELib.log:log(level, msg, author)
 	local buf = io.stdout
 	if level == self.LogLevel.FATAL or level == self.LogLevel.ERROR then
 		buf = io.stderr
 	end
-	if not author then
-		buf:write(("[%s] %s\n"):format(level, msg))
+
+	-- NOTE: Cursed and bad code!
+	if author then
+		if level == self.LogLevel.DEBUG then
+			local info = debug.getinfo(3, "nS")
+			buf:write(
+				string.format("(%s) [%s/%s](%s::%s) %s", os.date(), author, level, info.short_src, info.name, msg)
+			)
+		end
+		buf:write(string.format("(%s) [%s/%s] %s", os.date(), author, level, msg))
 	else
-		buf:write(("[%s/%s] %s\n"):format(author, level, msg))
+		if level == self.LogLevel.DEBUG then
+			local info = debug.getinfo(3, "nS")
+			buf:write(string.format("(%s) [%s](%s::%s) %s", os.date(), level, info.short_src, info.name, msg))
+		end
+		buf:write(string.format("(%s) [%s] %s", os.date(), level, msg))
 	end
+	buf:write("\n")
 end
 
 ---Wrapper function for `log:log()` for `LogLevel::INFO`

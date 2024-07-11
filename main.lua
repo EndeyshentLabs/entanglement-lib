@@ -15,7 +15,9 @@ function love.load()
 		local validInfo, validFuncs = ELib.mod:validateMod(v)
 
 		if not validInfo then
-			print(("Unable to load mod '%s@%s' (%s): invalid mod module info!"):format(v._NAME, v._VERSION, v._DIR_NAME))
+			print(
+				("Unable to load mod '%s@%s' (%s): invalid mod module info!"):format(v._NAME, v._VERSION, v._DIR_NAME)
+			)
 			brokenModCount = brokenModCount + 1
 			goto continue
 		end
@@ -27,7 +29,7 @@ function love.load()
 		print(("Successfully loaded mod '%s@%s' (%s)"):format(v._NAME, v._VERSION, v._DIR_NAME))
 		table.insert(loadedMods, v)
 
-	    ::continue::
+		::continue::
 	end
 end
 
@@ -44,7 +46,11 @@ function love.draw()
 	love.graphics.print(("Loaded mods (%d mod(s) broken):"):format(brokenModCount))
 	for k, v in ipairs(loadedMods) do
 		love.graphics.setColor(1, 1, 1)
-		love.graphics.print(("- %s@%s (%s)"):format(v._NAME, v._VERSION, v._DIR_NAME), 0, love.graphics.getFont():getHeight() * k)
+		love.graphics.print(
+			("- %s@%s (%s)"):format(v._NAME, v._VERSION, v._DIR_NAME),
+			0,
+			love.graphics.getFont():getHeight() * k
+		)
 		if v.draw then
 			v.draw()
 		end
